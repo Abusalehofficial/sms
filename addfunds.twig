@@ -1,0 +1,144 @@
+{% include 'header.twig' %}
+
+<!-- New Orders Section -->
+<div class="def_wraper">
+  <div class="container-fluid">
+    <div class="row">
+    
+      {% if contentText is not empty %}
+      <div class="col-md-12">
+        <div class="card card_v2 mb-3">
+          <div class="card-body text-center">
+            <h6 class="text-bold">{{ contentText }}</h6>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      
+      <!-- New Order Form -->
+      <div class="col-md-6">
+        <div class="card card_v2">
+          <div class="card-body">
+            <ul class="nav nav-pills tab_btn_wrap mb-3" id="pills-tab" role="tablist">
+              <li class="nav-item">
+                <button class="nav-link active" id="pills-order-tab" data-bs-toggle="pill" data-bs-target="#pills-order" type="button">
+                  <i class="far fa-credit-card"></i> {{ lang['addfunds.online.title'] }}
+                </button>
+              </li>
+              <li class="nav-item">
+                <button class="nav-link" id="pills-favorite-tab" data-bs-toggle="pill" data-bs-target="#pills-favorite" type="button">
+                  <i class="fas fa-redo-alt"></i> {{ lang['addfunds.transaction.title'] }}
+                </button>
+              </li>
+            </ul>
+
+            <div class="tab-content" id="pills-tabContent">
+              <!-- Payment Form Tab -->
+              <div class="tab-pane fade show active" id="pills-order">
+                {% if error %}
+                <div class="alert alert-danger alert-dismissible">
+                  <button type="button" class="close" data-dismiss="alert">×</button>
+                  {{ errorText }}
+                </div>
+                {% endif %}
+
+                {% if success %}
+                <div class="alert alert-success alert-dismissible">
+                  <button type="button" class="close" data-dismiss="alert">×</button>
+                  {{ successText }}
+                </div>
+                {% endif %}
+
+                {% if paymentsList %}
+                <form method="post" action="addfunds">
+                  <div class="form-group">
+                    <label for="payment_method_new">{{ lang['addfunds.method'] }}</label>
+                    <select class="form-control" id="payment_method_new" name="payment_type">
+                      {% for payment in paymentsList %}
+                      <option value="{{ payment['id'] }}" {% if data['payment_type'] == payment['id'] %} selected {% endif %}>
+                        {{ payment['method_name'] }}
+                      </option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div id="amount_field" class="form-group"></div>
+                  <div id="button_field" class="form-group w-100"></div>
+                </form>
+                {% else %}
+                <div class="form-group">
+                  <label for="payment_method_new">{{ lang['addfunds.method'] }}</label>
+                  <select disabled class="form-control" id="payment_method_new" name="payment_type">
+                    <option>{{ lang["addfunds.no.payment.method"] }}</option>
+                  </select>
+                </div>
+                {% endif %}
+              </div>
+
+              <!-- Transaction History Tab -->
+              <div class="tab-pane fade" id="pills-favorite">
+                <div class="table-responsive">
+                  <table class="table" id="addfundTable">
+                    <thead>
+                      <tr>
+                        <th>{{ lang["addfunds.transaction.id"] }}</th>
+                        <th>{{ lang["addfunds.transaction.amount"] }}</th>
+                        <th class="width-40">{{ lang["addfunds.transaction.method"] }}</th>
+                        <th>{{ lang["addfunds.transaction.date"] }}</th>
+                        <th class="nowrap">{{ lang["addfunds.transaction.transId"] }}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for transaction in transactions %}
+                      <tr>
+                        <td>{{ transaction['payment_id'] }}</td>
+                        <td>{{ convert_currency(transaction['payment_amount']) }}</td>
+                        <td class="width-40">{{ transaction['method_name'] }}</td>
+                        <td>{{ show_date(transaction['payment_create_date']) }}</td>
+                        <td class="nowrap">{{ transaction['payment_extra'] }}</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coupon System -->
+      {% if settings["coupon_system"] == 2 %}
+      <div class="container col-lg-6">
+        <div class="row">
+          <div class="card card_v2">
+            <div class="well">
+              <form method="post" action="kupon">
+                <div class="form-group">
+                  <label for="kuponadi">{{ lang["addfunds.coupon.label"] }}</label>
+                  <input type="text" class="form-control" id="kuponadi" name="kuponadi">
+                </div>
+                <input type="hidden" name="crsf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="btn btn-primary">{{ lang["addfunds.coupon.button.text"] }}</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Additional Content Section -->
+      <div class="col-md-6">
+        {% if contentText2 is not empty %}
+        <div class="card card_v2">
+          <div class="card-body">
+            {{ contentText2 }}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% include 'footer.twig' %}

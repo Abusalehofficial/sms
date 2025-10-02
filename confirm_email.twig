@@ -1,0 +1,108 @@
+{% include 'header.twig' %}
+
+
+<style>
+
+	.float-right {
+		position: absolute;
+		right: 45px;
+		bottom: 50px;
+	}
+</style>
+
+<!-- Main variables *content* -->
+<div class="main-panel">
+	<div class="content">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-8 col-md-offset-2">
+					<div class="alert alert-success" style="margin-bottom:10px;">
+						<p>{{lang["confirm.email.email.sent.text"]}}</p>
+					</div>
+					{% if error %}
+						<div class="alert alert-dismissible alert-danger" style="margin-bottom:5px;">
+							{{error}}
+						</div>
+					{% endif %}
+					{% if success %}
+						<div class="alert alert-dismissible alert-success" style="margin-bottom:5px;">
+							{{ successText }}
+						</div>
+					{% endif %}
+					<div class="card" style="margin-bottom: 10px;">
+						<div class="well">
+
+							<div class="form-group">
+								<label for="exampleInputEmail1">{{lang["confirm.email.email"]}}</label>
+								<input name="userEmail" type="email" value="{{ user['email'] }}" readonly class="form-control" id="exampleInputEmail1">
+
+							</div>
+
+							<div class="float-right">
+								<a id="resend_verification_link" href="javascript::void(0)">
+									{{lang["confirm.email.resend"]}}
+								</a>
+							</div>
+
+							<button id="change_email" data-toggle="modal" data-target="#changeEmailModal" class="btn btn-primary">
+								{{lang["confirm.email.change"]}}</button>
+						</div>
+					</div>
+					{# <div class="alert alert-info" style="margin-top:5px;">
+													<b>An activation system is made for system spam security.
+					</b>
+												</div> #}
+				</div>
+			</div>
+			{% if contentText %}
+				<div class="container">
+					<div class="row">
+						<div class="col-md-8 col-md-offset-2">
+							<div class="well ">
+								{{ contentText }}
+							</div>
+						</div>
+					</div>
+				</div>
+			{% endif %}
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="changeEmailModal" tabindex="-1" role="dialog" aria-labelledby="changeEmailModalContent" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalCenterTitle">{{lang["confirm.email.change"]}}</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+
+				<div class="form-group">
+					<label for="current-email">{{lang["confirm.email.email.current"]}}</label>
+
+					<input id="current_email" disabled value="{{ user['email'] }}" type="email" class="form-control">
+				</div>
+				<div class="form-group">
+					<label for="new-email">{{lang["confirm.email.email.new"]}}</label>
+					<input type="email" class="form-control" id="new_email">
+				</div>
+				<div class="form-group">
+					<label for="current-password">{{lang["confirm.email.password.current"]}}</label>
+					<input type="password" class="form-control" id="current_password">
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">{{lang["confirm.email.modal.close"]}}</button>
+				<button id="updateEmail" type="button" class="btn btn-primary">{{lang["confirm.email.modal.update"]}}</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% include 'footer.twig' %}

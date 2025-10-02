@@ -1,0 +1,380 @@
+<script type="text/javascript" src="{{ cdn_base_url }}public/blue_eternity/js1.js"></script>
+
+{% if user['auth'] %}
+
+
+{% include 'widgets/pointsModal.twig' %}
+{% include 'widgets/membershipModal.twig' %}
+
+<script type="text/javascript" src="{{ cdn_base_url }}public/extra_theme/GrowKing/v2/css/farxtjet462wr6bi.js"></script>
+
+{% else %}
+
+<footer class="footer__v2">
+
+</div>
+<div class="hr-line mt-2"></div>
+<h6 class="text-center text-white mb-0 mt-3">© copyright 2024    {{ site["site_name"] }} | All Rights Reserved</h6>
+</div>
+</footer>
+
+
+<script>
+function navToggleMob() {
+let menuBox = document.getElementById('navMob');
+menuBox.classList.toggle('active');
+}
+
+
+$(window).scroll(function () {
+var scroll = $(window).scrollTop();
+
+if (scroll >= 80) {
+$("#navbar").addClass("shrink");
+} else {
+$("#navbar").removeClass("shrink");
+}
+
+if (scroll >= 300) {
+$("#navbar").addClass("fixed-top");
+} else {
+$("#navbar").removeClass("fixed-top");
+}
+});
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+const swiper = new Swiper('.swiper', {
+// Default parameters
+slidesPerView: 1,
+spaceBetween: 0,
+autoplay: {
+delay: 2000,
+},
+navigation: {
+nextEl: '.slide-next',
+prevEl: '.slide-prev',
+},
+});
+</script>
+
+{% endif %}
+
+
+
+<script>
+const newOrderCats = document.getElementById('new-order-cats');
+
+if (newOrderCats) {
+const orderFormCats = document.getElementById('neworder_category');
+var realData = orderFormCats.innerHTML;
+
+const dCatBtns = document.querySelectorAll('.nwo-cat-btn');
+if (dCatBtns[0]) {
+[...dCatBtns].forEach(btn => {
+btn.addEventListener('click', e => {
+const val = btn.getAttribute('data-change-cat');
+const orderFormCats = document.getElementById('neworder_category');
+const options = document.querySelectorAll('#neworder_category-copy option');
+
+const dCatbtns = document.querySelectorAll('.nwo-cat-btn');
+[...dCatbtns].forEach(bt => {
+bt.classList.remove('active');
+});
+btn.classList.add('active');
+
+const newOptions = [];
+[...options].forEach(el => {
+if (el.innerText.toLowerCase().includes(val.toLowerCase())) {
+newOptions.push(el);
+}
+});
+const newOptionsHtml = [];
+[...newOptions].forEach(el => {
+newOptionsHtml.push(el.outerHTML);
+});
+orderFormCats.innerHTML = newOptionsHtml.join('');
+
+$('#neworder_category').trigger('change');
+});
+})
+}
+
+/**
+* copy order form data hidden
+*/
+setTimeout(() => {
+const orderFormCopy = document.createElement('select');
+orderFormCopy.setAttribute('id', 'neworder_category-copy');
+orderFormCopy.style.display = 'none';
+orderFormCopy.innerHTML = realData;
+orderFormCats.parentNode.insertBefore(orderFormCopy, orderFormCats);
+}, 1000)
+
+const nocWrapper = document.getElementById('noc-wrapper');
+nocWrapper.style.display = 'none';
+setTimeout(() => {
+nocWrapper.style.display = 'block';
+}, 1001);
+}
+</script>
+
+<!-- script for show more btn -->
+<script>
+const showMorebtn = document.getElementById('showMore');
+showMorebtn.addEventListener('click', function(e) {
+const targetThat = document.getElementById('more_menu');
+targetThat.classList.toggle('active_more_menu');
+});
+</script>
+
+<script type="text/javascript" src="{{ cdn_base_url }}public/extra_theme/GrowKing/0r4tywzonxftumui.js">
+</script>
+
+
+
+<!-- Start -->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="{{ cdn_base_url }}public/global/4.5/script.js"></script>
+
+
+<script src="{{ cdn_base_url }}public/ajax.js"></script>
+
+<script src="{{ cdn_base_url }}public/global/ajax.js"></script>
+
+<!-- End -->
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+
+
+{{ footerCode }}
+
+<script src="https://www.google.com/recaptcha/api.js?hl=en"></script>
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.3/js.cookie.min.js"></script>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+
+
+
+
+
+{% for script in scriptList %}
+<script type="text/javascript" src="{{ script }}"></script>
+{% endfor %}
+
+
+<script>
+$(function () {
+$('[data-toggle="tooltip"]').tooltip()
+})
+
+</script>
+
+
+<script>
+if (window.history.replaceState) {
+window.history.replaceState(null, null, window.location.href);
+}
+</script>
+
+<script>
+$(document).ready(() => {
+var searchServicesInputField = $("#searchServicesInputField");
+var searchServicesButtonIcon = $("#searchServicesButtonIcon");
+var searchServicesInputClearButton = $("#searchServicesInputClearButton");
+var searchServicesResultsDropdown = $("#searchServicesResultsDropdown");
+var searchQuery = searchServicesInputField.val();
+
+searchServicesButtonIcon.click(() => {
+searchServicesInputField.focus();
+});
+
+searchServicesInputField.focus(() => {
+searchServicesInputField.attr("placeholder", "");
+var a = searchServicesInputField.val();
+a = a.trim();
+if (a.length > 0) {
+searchServicesResultsDropdown.show();
+searchServicesInputClearButton.show();
+}
+});
+
+searchServicesInputField.blur((e) => {
+
+var a = searchServicesInputField.val();
+a = a.trim();
+if (a.length == 0) {
+searchServicesInputField.attr("placeholder", "Search Services...");
+searchServicesInputClearButton.hide();
+searchServicesInputField.val("");
+}
+});
+
+$(document).on("click",
+(e) => {
+
+t = $(e.target);
+
+if (t.is(searchServicesInputField) || t.is(searchServicesResultsDropdown)) {} else {
+searchServicesResultsDropdown.hide();
+}
+});
+
+
+searchServicesInputClearButton.click(() => {
+searchServicesInputField.val("");
+searchServicesInputField.blur();
+});
+
+searchServicesInputField.on("input",
+() => {
+var searchQuery = searchServicesInputField.val();
+searchQuery = searchQuery.trim();
+if (searchQuery.length > 0) {
+searchServicesInputClearButton.show();
+searchServicesResultsDropdown.show();
+searchServicesResultsDropdown.html('<div style="padding:4px;text-align:center;">Searching...</div>');
+} else {
+searchServicesResultsDropdown.hide();
+searchServicesInputClearButton.hide();
+}
+
+if (searchQuery.length > 0) {
+$.post("ajax_data", `action=search_services&query=${searchQuery}`, (json) => {
+var resultServices = json;
+var dropdownContent = "";
+dropdownContent += `<ul class="resultServicesList select2-results__options">`;
+resultServices.forEach((serviceInfo, index, resultServices) => {
+dropdownContent += `<li class="resultService select2-results__option" data-service-id="${serviceInfo["service_id"]}" data-category-id="${serviceInfo["category_id"]}"><a href="#" onclick="event.preventDefault();"><span class="badge badge-secondary style-text-primary badge-rounded">${serviceInfo["service_id"]}</span> ${serviceInfo["service_name"]}</a></li>`;
+});
+dropdownContent += `</ul>`;
+searchServicesResultsDropdown.html(dropdownContent);
+});
+
+}
+});
+
+$(document).on("click",
+"ul.resultServicesList > li.resultService",
+(event) => {
+var service = $(event.target).parent();
+//  console.log(service);
+searchServicesResultsDropdown.hide();
+$(document).focus();
+var category_id = $(service).data("category-id");
+var service_id = $(service).data("service-id");
+var category_select = $("#neworder_category");
+var service_select = $("#neworder_services");
+$.post("ajax_data", `action=set_selected_service&service_id=${service_id}`, () => {
+console.log(category_id);
+category_select.val(category_id);
+category_select.trigger("change");
+});
+
+
+});
+
+
+});
+</script>
+
+
+
+{% if (settings["whatsapp_number"] != "") %}
+<!-- WhatsApp Floating Button -->
+<script>
+(function () {
+    var whatsappNumber = '{{ settings["whatsapp_number"] }}'; // Dynamic number
+    var position = 'right'; // 'left' or 'right'
+
+    var button = document.createElement('div');
+    button.style.cssText = `
+        position: fixed;
+        bottom: 20px; /* thoda upar taaki Telegram ke upar aa sake */
+        ${position}: 20px;
+        z-index: 9999;
+        background-color: rgb(37, 211, 102) !important;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    `;
+
+    button.innerHTML = `
+        <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="width: 39px; height: 39px; fill: #fff;">
+    <path d="M19.11 17.205c-.372 0-1.088 1.39-1.518 1.39a.63.63 0 0 1-.315-.1c-.802-.402-1.504-.817-2.163-1.447-.545-.516-1.146-1.29-1.46-1.963a.426.426 0 0 1-.073-.215c0-.33.99-.945.99-1.49 0-.143-.73-2.09-.832-2.335-.143-.372-.214-.487-.6-.487-.187 0-.36-.043-.53-.043-.302 0-.53.115-.746.315-.688.645-1.032 1.318-1.06 2.264v.114c-.015.99.472 1.977 1.017 2.78 1.23 1.82 2.506 3.41 4.554 4.34.616.287 2.035.888 2.722.888.817 0 2.15-.515 2.478-1.318.13-.33.244-.73.244-1.088 0-.058 0-.144-.03-.215-.1-.172-2.434-1.39-2.678-1.39zm-2.908 7.593c-1.747 0-3.48-.53-4.942-1.49L7.793 24.41l1.132-3.337a8.955 8.955 0 0 1-1.72-5.272c0-4.955 4.04-8.995 8.997-8.995S25.2 10.845 25.2 15.8c0 4.958-4.04 8.998-8.998 8.998zm0-19.798c-5.96 0-10.8 4.842-10.8 10.8 0 1.964.53 3.898 1.546 5.574L5 27.176l5.974-1.92a10.807 10.807 0 0 0 16.03-9.455c0-5.958-4.842-10.8-10.802-10.8z"></path>
+  </svg>
+    `;
+
+    button.onclick = function () {
+        window.open('https://wa.me/' + whatsappNumber, '_blank');
+    };
+
+    document.body.appendChild(button);
+})();
+</script>
+{% endif %}
+
+{% if (settings["telegram_username"] != "") %}
+<!-- Telegram Floating Button -->
+
+<script>
+(function () {
+    var telegramUsername = '{{ settings["telegram_username"] }}'; // Replace with your dynamic variable
+    var position = 'left'; // 'left' or 'right'
+
+    var button = document.createElement('div');
+    button.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        ${position}: 20px;
+        z-index: 9999;
+        background-color: rgb(0, 135, 203) !important;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    `;
+
+    button.innerHTML = `
+        <svg viewBox="-8 -17 130 130" xmlns="http://www.w3.org/2000/svg" style="width: 52%; height: 52%; fill: #fff;">
+            <path d="M88.723,12.142C76.419,17.238,23.661,39.091,9.084,45.047c-9.776,3.815-4.053,7.392-4.053,7.392
+                s8.345,2.861,15.499,5.007c7.153,2.146,10.968-0.238,10.968-0.238l33.62-22.652c11.922-8.107,9.061-1.431,6.199,1.431
+                c-6.199,6.2-16.452,15.975-25.036,23.844c-3.815,3.338-1.908,6.199-0.238,7.63c6.199,5.246,23.129,15.976,24.082,16.691
+                c5.037,3.566,14.945,8.699,16.452-2.146c0,0,5.961-37.435,5.961-37.435c1.908-12.637,3.815-24.321,4.053-27.659
+                C97.307,8.804,88.723,12.142,88.723,12.142z"/>
+        </svg>
+    `;
+
+    button.onclick = function () {
+        window.open('https://t.me/' + telegramUsername, '_blank');
+    };
+
+    document.body.appendChild(button);
+})();
+</script>
+
+
+{% endif %}
+
+</body>
+</html>
+

@@ -1,0 +1,77 @@
+{% include 'header.twig' %}
+
+
+<style>
+
+	.float-right {
+		position: absolute;
+		right: 45px;
+		bottom: 50px;
+	}
+</style>
+
+<!-- Main variables *content* -->
+<div class="main-panel">
+	<div class="content">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-8 col-md-offset-2">
+					<div class="alert alert-success" style="margin-bottom:10px;">
+						<b>{{lang["otp.auth.email.sent.text"]}}</b>
+					</div>
+					{% if error %}
+						<div class="alert alert-dismissible alert-danger" style="margin-bottom:5px;">
+							{{error}}
+						</div>
+					{% endif %}
+					{% if success %}
+						<div class="alert alert-dismissible alert-success" style="margin-bottom:5px;">
+							{{ successText }}
+						</div>
+					{% endif %}
+					<div class="card" style="margin-bottom: 10px;">
+						<div class="well">
+							<form method="post" action="">
+								<div class="form-group">
+									<label for="exampleInputEmail1">{{lang["otp.auth.email"]}}</label>
+									<input name="userEmail" type="email" value="{{ user['email'] }}" readonly class="form-control" id="exampleInputEmail1">
+
+								</div>
+								<div class="form-group">
+									<label for="exampleInputPassword1">{{lang["otp.auth.otp"]}}</label>
+									<input required name="otp" type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter OTP Here">
+								</div>
+								<div class="float-right">
+									<a href="{{ site['url'] }}/otp_auth?resend={{ user['email'] }}">
+										{{lang["otp.auth.resend"]}}
+									</a>
+								</div>
+									<input type="hidden" name="crsf_token" value="{{ csrf_token() }}">
+								<button type="submit" class="btn btn-primary">
+									{{lang["otp.auth.submit"]}}
+								</button>
+
+							</form>
+						</div>
+					</div>
+					{# <div class="alert alert-info" style="margin-top:5px;">
+													<b>An activation system is made for system spam security.
+					</b>
+												</div> #}
+				</div>
+			</div>
+			{% if contentText %}
+				<div class="container">
+					<div class="row">
+						<div class="col-md-8 col-md-offset-2">
+							<div class="well ">
+								{{ contentText }}
+							</div>
+						</div>
+					</div>
+				</div>
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% include 'footer.twig' %}

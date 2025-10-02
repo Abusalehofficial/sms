@@ -1,0 +1,326 @@
+{% include 'header.twig' %}
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+:root{
+  --bg:#ffffff; --ink:#0f172a; --muted:#64748b; --line:#e6e9ef;
+  --p1:#0066ff; --p2:#8b5cf6; --p3:#22c55e; --grad:linear-gradient(135deg,var(--p1),var(--p2));
+  --radius:14px;
+}
+/* header spacing only */
+.header-spacer{height:100px}
+@media (max-width:768px){ .header-spacer{height:56px}}
+
+/* Card */
+.xcard{border:1px solid var(--line);border-radius:var(--radius);background:#fff;box-shadow:0 4px 14px rgba(15,23,42,.06)}
+.xcard .xhead{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.xcard .xbody{padding:18px}
+.title-chip{background:var(--grad);color:#fff;border-radius:10px;padding:.35rem .7rem;font-weight:600;letter-spacing:.15px}
+
+/* Inputs */
+.xfield{display:flex;flex-direction:column;gap:6px}
+.xinput{
+  width:100%;min-height:46px;border:1px solid var(--line);border-radius:12px;padding:.6rem .85rem;background:#fff;color:var(--ink)
+}
+.xinput[readonly]{background:#f8fafc}
+
+/* Grid */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px} @media(max-width:768px){.g2{grid-template-columns:1fr}}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px} @media(max-width:992px){.g3{grid-template-columns:1fr 1fr}} @media(max-width:576px){.g3{grid-template-columns:1fr}}
+
+/* CTA */
+.btn-primary{border:0;border-radius:12px;background:var(--grad);box-shadow:0 8px 20px rgba(59,130,246,.25);transition:transform .05s}
+.btn-primary:active{transform:translateY(1px)}
+
+/* Orders table */
+.scroll-box{max-height:62vh;overflow:auto;border:1px solid var(--line);border-radius:12px}
+.table{width:100%;border-collapse:separate;border-spacing:0}
+.table thead th{position:sticky;top:0;background:#fafafa;border-bottom:1px solid var(--line);padding:.65rem .8rem}
+.table tbody td{border-top:1px solid #f2f3f7;padding:.6rem .8rem}
+.table tbody tr:hover{background:#fcfdff}
+tfoot td{background:#f8fafc;color:var(--muted)}
+.badge-code{background:#eef2ff;border:1px solid #dbe4ff;color:#213d9a;padding:.2rem .45rem;border-radius:8px}
+.smallmuted{color:var(--muted);font-size:.9rem}
+
+/* Smart dropdown */
+.smart{position:relative}
+.smart-display{text-align:left; cursor:pointer}
+.smart-menu{
+  position:absolute; left:0; right:0; z-index:30; display:none;
+  background:#fff; border:1px solid var(--line); border-radius:12px; margin-top:6px;
+  box-shadow:0 10px 24px rgba(2,6,23,.10)
+}
+.smart-head{position:sticky; top:0; background:#fff; padding:10px 10px 6px}
+.smart-list{max-height:260px; overflow:auto; padding:6px 0}
+.smart-item{padding:.55rem .75rem; cursor:pointer}
+.smart-item:hover,.smart-item.active{background:#f3f6ff}
+.smart-empty{padding:.55rem .75rem;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<div class="header-spacer"></div>
+
+<div class="container" style="max-width:980px">
+
+  <!-- ORDER CARD -->
+  <div class="xcard mb-4">
+    <div class="xhead">
+      <span class="title-chip">Order</span>
+      <span class="smallmuted">Select and place order</span>
+    </div>
+    <div class="xbody">
+      <div class="g2 mb-3">
+
+        <!-- Country dropdown -->
+        <div class="xfield">
+          <label class="form-label">Country</label>
+          <div class="smart" id="countrySmart">
+            <button type="button" class="xinput smart-display" id="countryDisplay">Select country…</button>
+            <input type="hidden" id="country">
+            <div class="smart-menu" id="countryMenu">
+              <div class="smart-head">
+                <input type="text" class="xinput smart-search" id="countrySearch" placeholder="Search country…">
+              </div>
+              <div class="smart-list" id="countryList"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Service dropdown -->
+        <div class="xfield">
+          <label class="form-label">Service</label>
+          <div class="smart" id="serviceSmart">
+            <button type="button" class="xinput smart-display" id="serviceDisplay" disabled>Select service…</button>
+            <input type="hidden" id="service">
+            <div class="smart-menu" id="serviceMenu">
+              <div class="smart-head">
+                <input type="text" class="xinput smart-search" id="serviceSearch" placeholder="Search service…" disabled>
+              </div>
+              <div class="smart-list" id="serviceList"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="g3 mb-1">
+        <div class="xfield">
+          <label class="form-label">Price</label>
+          <input type="text" id="providerPrice" class="xinput" placeholder="—" readonly>
+        </div>
+        <div class="xfield" style="align-self:end">
+          <button class="btn btn-primary w-100" id="btnOrder">PLACE ORDER</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ORDERS LIST -->
+  <div class="xcard">
+    <div class="xhead">
+      <span class="title-chip" style="background:linear-gradient(135deg,var(--p3),#10b981)">Your Orders</span>
+      <span class="smallmuted">Scroll to load more</span>
+    </div>
+    <div class="xbody">
+      <div class="scroll-box" id="boxOrders">
+        <table class="table" id="tblOrders">
+          <thead>
+            <tr>
+   <th>Time</th>
+<th>Country</th>
+<th>Service</th>
+<th>Price</th>
+<th>Phone</th>
+<th>Activation</th>
+<th>Status</th>
+<th>OTP Code</th>
+<th>OTP Text</th>
+<th>Verif</th>         </tr>
+          </thead>
+          <tbody></tbody>
+          <tfoot><tr id="oFoot"><td colspan="7" class="text-center py-2">Loading…</td></tr></tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const toast=(icon,title)=>Swal.fire({toast:true,position:'top-end',timer:1900,showConfirmButton:false,icon,title});
+function post(action,data,cb){ $.ajax({url:'',method:'POST',data:Object.assign({action},data||{}),dataType:'json',success:cb,error:()=>cb({status:false,message:'Network error'})}); }
+function escapeHtml(s){return $('<div/>').text(s==null?'':String(s)).html();}
+function setFoot(text,show=true){ $('#oFoot').toggle(!!show).find('td').text(text||''); }
+
+/* ---------- Smart dropdown (tap to open, search inside) ---------- */
+function SmartDD(cfg){
+  const $display=$(cfg.display), $hidden=$(cfg.hidden), $menu=$(cfg.menu),
+        $search=$(cfg.search), $list=$(cfg.list);
+  let items=[], open=false;
+
+  function openMenu(){
+    if(open) return; open=true; $menu.show();
+    $search.val(''); render(''); setTimeout(()=> $search.trigger('focus'), 10);
+  }
+  function closeMenu(){ if(!open) return; open=false; $menu.hide(); }
+  function render(q){
+    const ql=(q||'').toLowerCase().trim();
+    const rows=!ql?items:items.filter(x=>x.name_l.includes(ql)||String(x.id).toLowerCase().includes(ql));
+    if(!rows.length){ $list.html('<div class="smart-empty">No results</div>'); return; }
+    $list.html(rows.map(x=>{
+      const nm=$('<div>').text(x.name).html();
+      return `<div class="smart-item" data-id="${x.id}" data-name="${nm}">${nm}</div>`;
+    }).join(''));
+  }
+  function pick(id,name){
+    $hidden.val(id); $display.text(name);
+    closeMenu(); cfg.onPick && cfg.onPick({id,name});
+  }
+
+  $display.on('click', ()=>{ if(!$display.prop('disabled')) openMenu(); });
+  $search.on('input', ()=> render($search.val()));
+  $list.on('mousedown', '.smart-item', function(e){ e.preventDefault(); pick($(this).data('id'), $(this).data('name')); });
+  $(document).on('mousedown', (e)=>{ if(!$.contains($menu[0],e.target) && !$.contains($display[0],e.target)) closeMenu(); });
+
+  return {
+    load(list){
+      items=(list||[]).map(x=>({id:x.id, name:x.name, name_l:String(x.name).toLowerCase()}));
+      const has=items.length>0;
+      $display.prop('disabled',!has).text(has?(cfg.placeholder||'Select…'):'No data');
+      $search.prop('disabled',!has);
+      const cur=$hidden.val();
+      if(!items.some(i=>String(i.id)===String(cur))){ $hidden.val(''); $display.text(cfg.placeholder||'Select…'); }
+    },
+    clear(){ $hidden.val(''); $display.text(cfg.placeholder||'Select…'); },
+    setDisabled(d){ $display.prop('disabled',!!d); $search.prop('disabled',!!d); }
+  };
+}
+
+/* ----- Instantiate dropdowns ----- */
+const countryDD = SmartDD({
+  display:'#countryDisplay', hidden:'#country', menu:'#countryMenu',
+  search:'#countrySearch', list:'#countryList', placeholder:'Select country…',
+  onPick(){ 
+    serviceDD.clear(); 
+    $('#providerPrice').val('');
+    fillServices(); // will use selected country_id
+  }
+});
+const serviceDD = SmartDD({
+  display:'#serviceDisplay', hidden:'#service', menu:'#serviceMenu',
+  search:'#serviceSearch', list:'#serviceList', placeholder:'Select service…',
+  onPick(){ schedulePriceFetch(); }
+});
+
+/* ----- Fetch data for dropdowns ----- */
+function fillCountries(){
+  $('#countryDisplay').text('Loading…').prop('disabled',true);
+  post('u_countries',{},res=>{
+    const rows=(res.status&&res.data.rows)?res.data.rows:[];
+    countryDD.load(rows);
+    $('#countryDisplay').prop('disabled',false);
+    // also refresh services for current country (if any)
+    fillServices();
+  });
+}
+function fillServices(){
+  const cid = $('#country').val();
+  if(!cid){ serviceDD.load([]); serviceDD.setDisabled(true); return; }
+  $('#serviceDisplay').text('Loading…').prop('disabled',true);
+  $('#serviceSearch').prop('disabled',true);
+  post('u_services',{country_id:cid},res=>{
+    const rows=(res.status&&res.data.rows)?res.data.rows:[];
+    serviceDD.load(rows);
+    serviceDD.setDisabled(false);
+    $('#serviceDisplay').prop('disabled',false);
+  });
+}
+
+/* ----- Price from DB (country + service) ----- */
+let priceTimer=null;
+function schedulePriceFetch(){ clearTimeout(priceTimer); priceTimer=setTimeout(fetchPrice,220); }
+function fetchPrice(){
+  const c=$('#country').val(), s=$('#service').val();
+  $('#providerPrice').val('');
+  if(!c||!s) return;
+  $('#providerPrice').val('…');
+  post('get_price_db',{country_id:c,service_id:s},res=>{
+    if(res.status){ $('#providerPrice').val(res.data.provider_price??''); }
+    else{ $('#providerPrice').val(''); toast('error',res.message||'Price error'); }
+  });
+}
+
+/* ----- Create order (no confirmation) ----- */
+$('#btnOrder').on('click', () => {
+  const $btn = $('#btnOrder');
+  const c = $('#country').val();
+  const s = $('#service').val();
+  const pp = $('#providerPrice').val().trim();
+
+  if (!c || !s) { toast('error','Select country & service'); return; }
+
+  // lock UI
+  $btn.prop('disabled', true).data('old', $btn.text()).text('Placing…');
+
+  post('u_create_order', { country_id: c, service_id: s, provider_price: pp }, res => {
+    // unlock UI
+    $btn.prop('disabled', false).text($btn.data('old') || 'PLACE ORDER');
+
+    if (res && res.status) {
+      toast('success', 'Order placed');
+      window.location.href = 'activation?aid='+encodeURIComponent(res.data.activation_id);
+      
+  
+
+    } else {
+      toast('error', (res && res.message) ? res.message : 'Failed');
+    }
+  });
+});
+/* ----- Orders: infinite scroll + footer status ----- */
+let oOffset=0,oBusy=false,oDone=false,oLimit=25;
+function resetOrders(){ oOffset=0;oBusy=false;oDone=false; $('#tblOrders tbody').empty(); setFoot('Loading…',true); }
+function loadOrders(){
+  if(oBusy||oDone) return; oBusy=true; setFoot('Loading…',true);
+  post('u_orders',{offset:oOffset,limit:oLimit},res=>{
+    oBusy=false;
+    if(!res.status){ setFoot('Failed to load',true); return; }
+    const rows=res.data.rows||[];
+    if(!rows.length){
+      if(oOffset===0) $('#tblOrders tbody').html('<tr><td colspan="7" class="text-muted">No orders yet.</td></tr>');
+      oDone=true; setFoot('All loaded',true); return;
+    }
+    const buf=[];
+    rows.forEach(r => buf.push(`
+  <tr>
+    <td>${escapeHtml(r.created_at||'')}</td>
+    <td>${escapeHtml(r.country_name||String(r.country_id||''))}</td>
+    <td><span class="badge-code">${escapeHtml(r.service_name||String(r.service_id||''))}</span></td>
+    <td>${escapeHtml(r.provider_price!=null ? r.provider_price : '')}</td>
+    <td>${escapeHtml(r.phone||'')}</td>
+    <td>${
+      r.activation_id!=null
+        ? `<a href="activation?aid=${encodeURIComponent(r.activation_id)}" target="_blank">View</a>`
+        : ''
+    }</td>
+    <td>${escapeHtml(r.status||'')}</td>
+    <td>${escapeHtml(r.otp_code||'')}</td>
+    <td>${escapeHtml(r.otp_text||'')}</td>
+    <td>${escapeHtml(r.verification_type!=null ? String(r.verification_type) : '')}</td>
+  </tr>
+`));
+    $('#tblOrders tbody').append(buf.join(''));
+    oOffset = res.data.next_offset ?? oOffset;
+    if(res.data.next_offset==null){ oDone=true; setFoot('All loaded',true); } else { setFoot('Scroll to load more…',true); }
+  });
+}
+$('#boxOrders').on('scroll', function(){ if(this.scrollTop + this.clientHeight >= this.scrollHeight-10) loadOrders(); });
+
+/* ----- Boot ----- */
+$(function(){ fillCountries(); resetOrders(); loadOrders(); });
+</script>
+<br><br><br><br>
+{% include 'footer.twig' %}
